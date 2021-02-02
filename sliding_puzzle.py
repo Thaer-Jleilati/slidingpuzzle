@@ -6,7 +6,7 @@ FPS = 60
 FRAMES_PER_SOLVE_ANIM = 15
 current_solve_frame = 0
 
-DISPLAY_DEBUG_TEXT = True
+DISPLAY_DEBUG_TEXT = False
 BG_COL = pg.Color("chocolate4")
 IMG_DIR = "pics"
 
@@ -63,8 +63,8 @@ debug_text_button =    b.Button("Debug", pg.Rect(3 * screen_w/num_buttons, img_a
 solve_button.onclick = play_solve
 new_image_button.onclick = update_random_image
 shuffle_button.onclick = grid.shuffle_tiles
-#debug_text_button.onclick = toggle_debug_text
-debug_text_button.onclick = grid.check_valid_moves
+debug_text_button.onclick = toggle_debug_text
+#debug_text_button.onclick = grid.check_valid_moves
 
 buttons = [solve_button, shuffle_button, new_image_button, debug_text_button]
 
@@ -138,6 +138,11 @@ def render():
             pg.draw.line(screen, border_col, (0, (i+1)*TILE_H-1), (img_area_w, (i+1)*TILE_H-1), GRIDLINE_W)
         # Draw border
         pg.draw.rect(screen, border_col, (0, 0, img_area_w, img_area_h), 2)
+
+    if playing_solve:
+        textsurface = pg.font.SysFont('Corbel', 50).render(f"Solving... {len(solve_moves_to_play)}" , True, pg.Color("white"))
+        screen.blit(textsurface, (img_area_w/2 - textsurface.get_width()/2, img_area_h/2-textsurface.get_height()/2))
+
     pg.display.update()
 
 def update(step_size):

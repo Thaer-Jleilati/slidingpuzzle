@@ -25,18 +25,23 @@ class Grid:
         
     def initiate_tiles(self):
         self.all_positions = [(j, i) for i in range(self.HEIGHT) for j in range(self.WIDTH)]
+        self.moves_so_far.clear()
         self.solved = True
 
     def shuffle_tiles(self):
-        all_grids_used_in_solve.clear() # New solve is needed
-
-        random.shuffle(self.all_positions)
-
+        # Put in blank tile if it doesn't exist yet.
         for (i, pos) in enumerate(self.all_positions):        
             if (pos is not None and pos[0] == self.WIDTH-1 and pos[1] == self.HEIGHT-1):
-                self.all_positions[i] = None # Put back blank tile - used after we shuffle again after we solve it
+                self.all_positions[i] = None 
+
+        # Play 100 random moves
+        for i in range(100):
+            valid_moves = Grid.check_valid_moves(self)
+            move = random.choice(valid_moves)
+            self.click_on_tile(*move)
+
         self.solved = False
-        print(self.all_positions)
+        self.moves_so_far.clear()
 
     def convert_linear_idx(self, tile_x, tile_y):
         return tile_y * self.WIDTH + tile_x
@@ -112,11 +117,15 @@ class Grid:
         return child_grids
 
     def solve(self):
+        all_grids_used_in_solve.clear()
+        self.moves_so_far.clear()
         next_grids_to_solve = Grid.get_child_grids_to_solve(self)
         for child_grid in next_grids_to_solve:
             if child_grid.check_solve():
                 print(f"SOLVED! in {child_grid.iterdepth} moves: ", child_grid.moves_so_far)
+                all_grids_used_in_solve.clear()
                 return child_grid.moves_so_far
             next_grids_to_solve.extend(Grid.get_child_grids_to_solve(child_grid))
         print("No solves found. Number grids attempted: " + str(len(all_grids_used_in_solve))) 
+        all_grids_used_in_solve.clear()
         return None           
