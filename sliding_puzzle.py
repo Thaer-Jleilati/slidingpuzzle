@@ -9,9 +9,9 @@ BG_COL = pg.Color("chocolate4")
 IMG_DIR = "pics"
 
 img_size = img_w, img_h = 720, 480
-GRID_W = 2
-GRID_H = 2
-GRIDLINE_W = 2
+GRID_W = 3
+GRID_H = 3
+GRIDLINE_W = 3
 TILE_W = img_w//GRID_W
 TILE_H = img_h//GRID_H
 
@@ -49,7 +49,7 @@ shuffle_button =        b.Button("Shuffle", pg.Rect(1 * screen_w/num_buttons, im
 new_image_button =    b.Button("New image", pg.Rect(2 * screen_w/num_buttons, img_area_h, screen_w/num_buttons, status_bar_h), pg.Color("goldenrod3"))
 debug_text_button =    b.Button("Debug", pg.Rect(3 * screen_w/num_buttons, img_area_h, screen_w/num_buttons, status_bar_h), pg.Color("seashell3"))
 #solve_button.onclick = grid.initiate_tiles
-solve_button.onclick = grid.solve
+solve_button.onclick = grid.solve1
 new_image_button.onclick = update_random_image
 shuffle_button.onclick = grid.shuffle_tiles
 #debug_text_button.onclick = toggle_debug_text
