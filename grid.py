@@ -12,6 +12,7 @@ class Grid:
             self.HEIGHT = h
         
             self.all_positions = None
+            self.moves_so_far = []
 
             self.initiate_tiles() # Initiate the grid in an ordered way
             self.shuffle_tiles()
@@ -19,7 +20,8 @@ class Grid:
             self.WIDTH = copy_grid.WIDTH
             self.HEIGHT = copy_grid.HEIGHT
             self.solved = False
-            self.all_positions = [pos for pos in copy_grid.all_positions]        
+            self.moves_so_far = copy_grid.moves_so_far[:] # create a copy
+            self.all_positions = copy_grid.all_positions[:] # create a copy
         
     def initiate_tiles(self):
         self.all_positions = [(j, i) for i in range(self.HEIGHT) for j in range(self.WIDTH)]
@@ -67,6 +69,7 @@ class Grid:
 
             # We found the blank tile, now swap them
             if adjacent_tile is None:
+                self.moves_so_far.append((tile_x, tile_y))
                 #print(f"Swapping tile at {tile_x},{tile_y} with blank at {a_x},{a_y}")
                 self.swap(tile_x, tile_y, a_x, a_y)
                 return True # succesful click
@@ -80,9 +83,6 @@ class Grid:
     def check_valid_moves(grid):
         moves = []
 
-        if None not in grid.all_positions:
-            x = 3
-            pass
         idx = grid.all_positions.index(None)
         tile_x = idx % grid.WIDTH
         tile_y = idx // grid.WIDTH
@@ -92,10 +92,8 @@ class Grid:
                 continue # Index out of bounds, don't check that tile
             moves.append((a_x, a_y))
 
-       #print(moves)
         return moves
 
-    #[(1, 0), None, (2, 1), (1, 3), (2, 0), (0, 2), (0, 0), (0, 1), (2, 2), (1, 2), (1, 1), (0, 3)]
     def get_child_grids_to_solve(grid):
         valid_moves = Grid.check_valid_moves(grid)
         child_grids = []
@@ -113,33 +111,12 @@ class Grid:
                 child_grids.append(new_grid)
         return child_grids
 
-    def solve1(self):
+    def solve(self):
         next_grids_to_solve = Grid.get_child_grids_to_solve(self)
         for child_grid in next_grids_to_solve:
             if child_grid.check_solve():
-                print("SOLVED!")
-                return True
+                print(f"SOLVED! in {child_grid.iterdepth} moves: ", child_grid.moves_so_far)
+                return child_grid.moves_so_far
             next_grids_to_solve.extend(Grid.get_child_grids_to_solve(child_grid))
-        print("No solves found. Number grids attempted: " + str(len(all_grids_used_in_solve)))            
-
-    def solve(self):
-        
-        print("Calling solve on grid with ITERDETPHHHHHHHH "  + str(self.iterdepth) )
-        
-        if stringed_list in all_grids_used_in_solve:
-            pass
-        
-       
-
-        for child_grid in child_grids:
-            if (child_grid.check_solve()):
-                print("SOLVED!")
-                print(solved[0])
-                return True
-            child_grid.solve()
-
-            #basicaly we need a hash or some data structue from which we can load a specific grid
-            #every time we call the move method, we save a copy of the grid's hash
-            #this means we can go 'up' the tree
-            # so basically we go deep until we reach a point where the grid == a grid we've seen before (we compare hash)
-            # then we goback up the tree and into another branch?
+        print("No solves found. Number grids attempted: " + str(len(all_grids_used_in_solve))) 
+        return None           
