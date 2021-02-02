@@ -11,8 +11,8 @@ BG_COL = pg.Color("chocolate4")
 IMG_DIR = "pics"
 
 img_size = img_w, img_h = 720, 480
-GRID_W = 3
-GRID_H = 3
+GRID_W = 6
+GRID_H = 6
 GRIDLINE_W = 2
 TILE_W = img_w//GRID_W
 TILE_H = img_h//GRID_H

@@ -25,7 +25,6 @@ class Grid:
         
     def initiate_tiles(self):
         self.all_positions = [(j, i) for i in range(self.HEIGHT) for j in range(self.WIDTH)]
-        self.moves_so_far.clear()
         self.solved = True
 
     def shuffle_tiles(self):
@@ -34,14 +33,13 @@ class Grid:
             if (pos is not None and pos[0] == self.WIDTH-1 and pos[1] == self.HEIGHT-1):
                 self.all_positions[i] = None 
 
-        # Play 100 random moves
-        for i in range(100):
+        # Play some random moves, enough depending on grid size
+        for i in range(self.WIDTH * self.HEIGHT ** 2):
             valid_moves = Grid.check_valid_moves(self)
             move = random.choice(valid_moves)
             self.click_on_tile(*move)
 
         self.solved = False
-        self.moves_so_far.clear()
 
     def convert_linear_idx(self, tile_x, tile_y):
         return tile_y * self.WIDTH + tile_x
